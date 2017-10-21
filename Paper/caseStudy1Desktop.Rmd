@@ -1,8 +1,14 @@
 ---
-title: "Case Study 1"
-author: "Brian Coari"
-date: "October 10, 2017"
-output: html_document
+title: "Case Study 1 (Group Project)"
+author:
+- 'Group B'
+- '    Lisa Street'
+- '    Annahid Lee'
+- '    Brian Coari'
+date: "October 23, 2017"
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -17,37 +23,38 @@ The goal of this case study is to analyze the Income Groups of the educational d
 
 
 ```{r import data}
-
 #read CSV input into data frames
-EDSTATS_Country <- read.csv("Data\\EDSTATS_Country.csv",header=TRUE, sep=",")
-GDP <- read.csv("Data\\GDP.csv",header=TRUE, sep=",")
-
-
+EDSTATS_Country <- read.csv("..\\Data\\EDSTATS_Country.csv",header=TRUE, sep=",", stringsAsFactors=FALSE)
+GDP <- read.csv("..\\Data\\GDP.csv",header=TRUE, sep=",", stringsAsFactors=FALSE)
 ```
 
 ## Cleaning Data
 
 ```{r clean data}
-
 #Data Cleanup#
 #IN GDP.CSV: updated/added these column names to match EDSTATS_Country Country
 #    CountryCode	
 #    Long Name	
-
 #IN GDP.CSV: moved this column in GDP to the header
 #    Ranking	
-
 #IN GDP.CSV: Renamed this column to make the header more clear
 #    GDPInMillions2010_OR_2011_OR_2012
-
 #IN GDP.CSV: Added a column called "Note" which stores this information:
 #     Note: Rankings include only those economies with confirmed GDP estimates. Figures in italics are for 2011 or 2010.
 #     a. Includes Former Spanish Sahara.  b. Excludes South Sudan  c. Covers mainland Tanzania only. d. Data are for the area 
 #     controlled by the government of the Republic of Cyprus.   e. Excludes Abkhazia and South Ossetia.  f. Excludes Transnistria.
-
 #IN GDP.CSV: Since there is no way to tell what values are for 2010,2011, or 2012 since italics are not tracked in CSV files I renamed the GDP Field Appropriately
-#IN GDP.CSV: Deleted blank lines, notes, or lines with ".." for "Not Available" since they did not contain meaningful data.
+names(GDP) <- c('CountryCode','Ranking','Long Name','GDPInMillions2010_OR_2011_OR_2012','note')
 
+#IN GDP.CSV: Deleted blank lines for country code and ranking since they did not contain meaningful data for this analysis and might throw off mean analysis.
+GDP <- GDP[GDP$Ranking!="", ]
+GDP <- GDP[GDP$CountryCode!="", ]
+
+#convert Ranking to numeric
+GDP$Ranking <- as.numeric(GDP$Ranking)
+
+#convert GPD to numeric and remove commas
+GDP$GDPInMillions2010_OR_2011_OR_2012 <- as.numeric(gsub(",","",GDP$GDPInMillions2010_OR_2011_OR_2012)) 
 
 ```
 
@@ -55,19 +62,16 @@ GDP <- read.csv("Data\\GDP.csv",header=TRUE, sep=",")
 ## Analyzing Data
 
 ```{r analyze data}
+
 # 1	Merge the data based on the country shortcode. How many of the IDs match? 
+
+#Merge EDSTATS_Country and GDP by Country Code
 merged_data <- merge(EDSTATS_Country,GDP,by="CountryCode")
 print(dim(merged_data))
-#Therefore 203 observations match
-
-
-
+#189 IDs match
 
 
 # 2	Sort the data frame in ascending order by GDP (so United States is last). What is the 13th country in the resulting data frame?
-
-#convert GPD to numeric and remove commas
-merged_data$GDPInMillions2010_OR_2011_OR_2012 <- as.numeric(gsub(",","",merged_data$GDPInMillions2010_OR_2011_OR_2012)) 
 
 #order the merged data by GDP 
 order.GDP <- order(merged_data$GDPInMillions2010_OR_2011_OR_2012)
@@ -76,11 +80,8 @@ order.GDP <- order(merged_data$GDPInMillions2010_OR_2011_OR_2012)
 merged_data_sorted_GDP_asc <- merged_data[order.GDP, ]
 
 #Print the long name of the 13th country in the ordered list 
-print(merged_data_sorted_GDP_asc[13,"Long.Name.x"])
-
-
-
-
+print(merged_data_sorted_GDP_asc[13,"Long.Name"])
+#St. Kitts and Nevis
 
 # 3	What are the average GDP rankings for the "High income: OECD" and "High income: nonOECD" groups? 
 
@@ -90,41 +91,36 @@ HighIncomeNonOECD <- merged_data[merged_data$Income.Group == 'High income: nonOE
 
 #Print means
 print(paste("High Income OECD mean Ranking: ",mean(HighIncomeOECD$Ranking)))
+#High Income OECD mean Ranking:  32.97
 
 print(paste("High Income Non OECD mean Ranking: ",mean(HighIncomeNonOECD$Ranking)))
-
-
-
-
+#High Income Non OECD mean Ranking:  91.91
 
 # 4	Plot the GDP for all of the countries. Use ggplot2 to color your plot by Income Group.
 
+#Include plotting library
 library(ggplot2)
 
-#Remove everything with an NA ranking (not a country)
-country_merged_data <- merged_data[-which(is.na(merged_data$Ranking)), ]
-
 #Form the basic plot options
-GdpPlot <- ggplot(country_merged_data, aes(x=CountryCode, y=GDPInMillions2010_OR_2011_OR_2012, colour=Income.Group))
+GdpPlot <- ggplot(merged_data, aes(x=CountryCode, y=GDPInMillions2010_OR_2011_OR_2012, colour=Income.Group))
 
-#Print the plot with logarithmic scaling for higher readability
-print(GdpPlot + labs(x = "Country Code", y="Gross Domestic Product") + geom_point(size = 4) + scale_y_continuous(trans='log2') + theme(axis.text.x = element_text(angle = 90, hjust = 1)))
+#Print the plot with logarithmic scaling for higher readability, each Income Group in a different color
+print(GdpPlot + geom_point() + scale_y_continuous(trans='log2') + theme(axis.text.x = element_text(angle = 90, hjust = 1)))
 
-
-
+#print a plot grouped by Income.Group since it looks a little cleaner and might provide insights that are easier to interpret
+print(ggplot(merged_data, aes(y = GDPInMillions2010_OR_2011_OR_2012, x=Income.Group,fill=Income.Group)) + scale_y_log10()+ geom_point(pch = 21, size = 8, stat = "identity", position=position_jitter())+ scale_fill_manual(values = c("red", "orange", "green", "blue","brown"), na.value = "grey50" ) + theme(axis.text.x = element_text(angle = 45, hjust = 1)))
 
 
 # 5	Cut the GDP ranking into 5 separate quantile groups. Make a table versus Income.Group. How many countries are Lower middle income but among the 38 nations with highest GDP?
 
 #Determine the quantiles
-country_merged_data_quantiles <- quantile(country_merged_data$Ranking, probs = seq(0, 1, 0.2))
+merged_data_quantiles <- quantile(merged_data$Ranking, probs = seq(0, 1, 0.2))
 
 #Assign the ranks into quantile groups 
-country_merged_data$Ranking_quantiles <- cut(country_merged_data$Ranking, breaks = country_merged_data_quantiles)
+merged_data$Ranking_quantiles <- cut(merged_data$Ranking, breaks = merged_data_quantiles)
 
 #print the table of income group vs ranking quantiles
-print(table(country_merged_data$Income.Group,country_merged_data$Ranking_quantiles))
+print(table(merged_data$Income.Group,merged_data$Ranking_quantiles))
 #The intersection of the top ranking group "(1,38.6]" and the "Lower middle income" group is 5
 #Therefore there are 5 countries with Lower middle income but among the 38 nations with highest GDP
-
 ```
