@@ -29,7 +29,9 @@
 # 	caseStudy1Desktop.Rmd
 # 		-RMarkdown file with sections for Importing, Cleaning, and Analyzing the data
 # 	caseStudy1Desktop.html
-# 		-Output of the RMarkdown File for easy in-browser reading
+# 		-HTML output of the RMarkdown File for easy in-browser reading
+# 	caseStudy1Desktop.pdf
+# 		-PDF output of the RMarkdown File for easy in-browser reading
 # 	GDP_Per_Country.pdf
 # 		-Enlarged form of the plot of GDP data and Income classifications so the country names are slightly more readable.
 		
