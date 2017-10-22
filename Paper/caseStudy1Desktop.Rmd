@@ -132,7 +132,7 @@ From the means of the filtered merge data we can see that the average GDP rankin
 
 Our next analysis will have is plot the GDP for all of the countries, color-coding the points by Income Group. We will show two different plots for our analysis, one with the x-axis grouped by country and the second with the x-axis grouped by Income Group.
 
-```{r analyze data 4}
+```{r analyze data 4, echo=FALSE}
 #Include plotting library
 library(ggplot2)
 
