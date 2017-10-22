@@ -6,9 +6,8 @@ author:
 - '    Annahid Lee'
 - '    Brian Coari'
 date: "October 23, 2017"
-output:
-  html_document: default
-  pdf_document: default
+output: md_document
+
 ---
 
 ```{r setup, include=FALSE}
