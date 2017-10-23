@@ -1,0 +1,5 @@
+"0","#Print the plot with logarithmic scaling for higher readability, each Income Group in a different color
+print(GdpPlot + geom_point() + scale_y_continuous(trans='log2') + theme(axis.text.x = element_text(angle = 90, hjust = 1)))
+"
+"2","Error in seq.default(min, max, by = by) : 'from' must be a finite number
+"
