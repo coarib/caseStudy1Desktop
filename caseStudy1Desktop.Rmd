@@ -74,7 +74,6 @@ knitr::read_chunk('Import_data.R')
 ```
 
 
-
 ## Cleaning Data
 
 In order to ensure we get correct results on our analysis some data cleanup is necessary since the EDP.CSV dataset contains many blank rows or rows that are irrelevant to this analysis. It might be possible to perform these exclusions at every calculation but the risk of a mistake is higher and the code would become much more complicated, so we will clean the code prior to analysis.
@@ -149,6 +148,7 @@ This plot shows our countries from the GDP data on the x-axis and the GDP for th
 ```{r Analysis4.R, eval=TRUE}
 
 ```
+
 This plot shows ourr countries from the GDP data on the x-axis and the GDP for that county on the y-axis with the color of each point representing its income group, but this time the countries are grouped by their income group from the educational data. 
 
 A design decision was made to show the y-axis in logarithmic scale since some countries had a vastly higher GDP than most countries and the detail of the spread of the lower countries was lost, making the graphs less impactful since our goal is to see if a country's income group is somehow correlated to its GDP. Logarithmic scale makes these outliers less impactful in the skewing of the plots.
@@ -168,6 +168,7 @@ knitr::read_chunk('Analysis5.R')
 ```{r Analysis5.R, eval=TRUE}
 
 ```
+
 This Table shows the five income groups tracked in our educational data on the x-axis versus the ranking group of the country's GDP. Each individual cell show the number of countries in that income group and ranking group.
 From this table we can see that 
 The intersection of the top ranking group "(1,38.6]" and the "Lower middle income" group is 5, therefore there are 5 countries with Lower Middle income among the 38 nations with highest GDP in our dataset. Finding those countries in the merged data allows us to see these countries are China, Egypt, Indonesia, India and Thailand.
