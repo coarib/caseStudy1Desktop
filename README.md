@@ -1,10 +1,21 @@
 # caseStudy1Desktop
-
+#
 # Files:
 # 
 # caseStudy1Desktop.Rproj
 # 
-# Data\
+# caseStudy1Desktop.Rmd
+# 	-RMarkdown file with sections for Importing, Cleaning, and Analyzing the data
+#	-Each Section is imported from an RScript for the functionality listed, with the analysis split into 5 parts, one file per script in the root directory:
+# 		 -Load_libraries.R
+# 		 -Import_data.R	
+# 		 -clean_data.R
+#		 -Analysis1.R
+# 		 -Analysis2.R
+# 		 -Analysis3.R
+# 		 -Analysis4.R
+# 		 -Analysis5.R
+# Data\	
 # 	EDSTATS_Country.csv
 # 		-Educational data for countries
 # 		-Fields Applicable to this analysis:
@@ -26,8 +37,6 @@
 # 		-Raw data, processed in the Data Cleanup phase to remove blank or irrelevant rows
 # 
 # Paper\
-# 	caseStudy1Desktop.Rmd
-# 		-RMarkdown file with sections for Importing, Cleaning, and Analyzing the data
 # 	caseStudy1Desktop.html
 # 		-HTML output of the RMarkdown File for easy in-browser reading
 # 	caseStudy1Desktop.pdf
